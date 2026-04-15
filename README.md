@@ -74,7 +74,9 @@ Follow these steps to deploy your local instance:
 
 ## 🎬 Video Walkthrough Demo
 
-A video walkthrough demonstrating the chatbot's real-time capabilities and handling of short fallback extraction patterns can be found via the Loom output or included WebP in the project release.
+A video walkthrough demonstrating the chatbot's real-time capabilities and handling of short fallback extraction patterns, including multilingual support and context awareness:
+
+![TalentScout Demo Walkthrough](assets/TalentScout_Demo.webp)
 
 ---
 *Developed for LeadOps & TalentScout Initiatives.*
