@@ -29,9 +29,7 @@ load_dotenv(os.path.join(_PROJECT_ROOT, ".env"))
 
 logger = logging.getLogger(__name__)
 
-# ──────────────────────────────────────────────
 # Configuration
-# ──────────────────────────────────────────────
 
 # Support both Gemini and OpenAI keys
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "")
@@ -57,9 +55,7 @@ def is_llm_available() -> bool:
     return _get_provider() is not None
 
 
-# ──────────────────────────────────────────────
 # Chat completion
-# ──────────────────────────────────────────────
 
 def chat_completion(
     messages: list[dict],
@@ -112,9 +108,7 @@ def chat_completion(
         return None
 
 
-# ──────────────────────────────────────────────
-# Specialised calls
-# ──────────────────────────────────────────────
+# Specialized LLM calls
 
 def generate_conversational_reply(
     system_prompt: str,

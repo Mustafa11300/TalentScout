@@ -27,9 +27,7 @@ from data.session_store import save_session
 from utils.security import mask_email, mask_phone, hash_session_id
 
 
-# ──────────────────────────────────────────────
 # Page config & custom CSS
-# ──────────────────────────────────────────────
 
 st.set_page_config(
     page_title="TalentScout — AI Hiring Assistant",
@@ -152,9 +150,7 @@ CUSTOM_CSS = """
 st.markdown(CUSTOM_CSS, unsafe_allow_html=True)
 
 
-# ──────────────────────────────────────────────
 # Session state initialisation
-# ──────────────────────────────────────────────
 
 if "sm" not in st.session_state:
     st.session_state.sm = StateMachine()
@@ -164,9 +160,7 @@ if "sm" not in st.session_state:
 sm: StateMachine = st.session_state.sm
 
 
-# ──────────────────────────────────────────────
 # Sidebar — live candidate card
-# ──────────────────────────────────────────────
 
 with st.sidebar:
     st.markdown("## 🎯 TalentScout")
@@ -254,9 +248,7 @@ with st.sidebar:
         st.success("✅ Session saved")
 
 
-# ──────────────────────────────────────────────
 # Main area — chat interface
-# ──────────────────────────────────────────────
 
 # Header
 st.markdown("""

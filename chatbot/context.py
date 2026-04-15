@@ -35,7 +35,7 @@ class ContextManager:
         self.messages: list[dict] = []
         self.max_history = max_history
 
-    # ── add messages ───────────────────────────
+    # Add messages
 
     def add_system_message(self, content: str) -> None:
         """Set or replace the system message (always first)."""
@@ -54,7 +54,7 @@ class ContextManager:
         self.messages.append({"role": "assistant", "content": content})
         self._trim()
 
-    # ── read helpers ───────────────────────────
+    # Read helpers
 
     def get_messages(self) -> list[dict]:
         """Return the full message list (for LLM calls)."""
@@ -87,7 +87,7 @@ class ContextManager:
         """Number of messages (including system)."""
         return len(self.messages)
 
-    # ── private ────────────────────────────────
+    # Private
 
     def _trim(self) -> None:
         """

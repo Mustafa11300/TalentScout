@@ -12,9 +12,7 @@ from ``prompts.py`` and return richer, contextual questions.
 
 from __future__ import annotations
 
-# ──────────────────────────────────────────────
 # Static question bank (fallback / offline mode)
-# ──────────────────────────────────────────────
 
 _QUESTION_BANK: dict[str, list[dict]] = {
     "python": [
@@ -102,9 +100,7 @@ _GENERIC_QUESTIONS: list[dict] = [
 ]
 
 
-# ──────────────────────────────────────────────
 # Public API
-# ──────────────────────────────────────────────
 
 def build_question_queue(tech_stack: list[str], questions_per_tech: int = 3) -> list[dict]:
     """

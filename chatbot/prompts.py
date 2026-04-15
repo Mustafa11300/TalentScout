@@ -5,9 +5,7 @@ All system / user prompt templates live here as versioned template strings.
 This keeps prompt tuning fast and the logic layer clean.
 """
 
-# ──────────────────────────────────────────────
-# System prompt — injected in every LLM call
-# ──────────────────────────────────────────────
+# System prompt
 
 SYSTEM_PROMPT = """\
 You are TalentScout, a professional and friendly hiring assistant for a \
@@ -31,9 +29,7 @@ leading tech recruitment agency.
 {candidate_json}
 """
 
-# ──────────────────────────────────────────────
 # GREETING stage
-# ──────────────────────────────────────────────
 
 GREETING_MESSAGE = """\
 👋 Hello and welcome to **TalentScout**!
@@ -53,9 +49,7 @@ recruitment screening purposes.*
 Let's get started! Could you tell me your **full name**?\
 """
 
-# ──────────────────────────────────────────────
 # INFO_GATHERING stage
-# ──────────────────────────────────────────────
 
 INFO_GATHERING_USER_PROMPT = """\
 Thanks for that! I still need a few more details from you. \
@@ -67,9 +61,7 @@ Could you please share your **{missing_fields}**?
 ```\
 """
 
-# ──────────────────────────────────────────────
 # TECH_DECLARATION stage
-# ──────────────────────────────────────────────
 
 TECH_DECLARATION_USER_PROMPT = """\
 Excellent — I've got all your basic information! 🎉
@@ -80,9 +72,7 @@ languages, frameworks, and tools** you're most proficient in?
 For example: *Python, Django, React, PostgreSQL, Docker, AWS*.\
 """
 
-# ──────────────────────────────────────────────
-# TECH_QUESTIONING stage — generation prompt (sent to LLM)
-# ──────────────────────────────────────────────
+# TECH_QUESTIONING stage — generation prompt
 
 TECH_QUESTION_GEN_PROMPT = """\
 You are generating technical screening questions for a candidate.
@@ -107,9 +97,7 @@ Example:
 ]
 """
 
-# ──────────────────────────────────────────────
-# TECH_QUESTIONING stage — per-question display
-# ──────────────────────────────────────────────
+# TECH_QUESTIONING stage — display format
 
 TECH_QUESTION_ASK_PROMPT = """\
 **Question {index}/{total}** · *{technology}* · `{difficulty}`
@@ -117,9 +105,7 @@ TECH_QUESTION_ASK_PROMPT = """\
 {question}\
 """
 
-# ──────────────────────────────────────────────
 # WRAP_UP stage
-# ──────────────────────────────────────────────
 
 WRAP_UP_MESSAGE = """\
 Thank you so much, {name}! 🙏
@@ -135,18 +121,14 @@ deeper technical interview.
 We appreciate your time and wish you the best of luck! 🍀\
 """
 
-# ──────────────────────────────────────────────
 # ENDED state
-# ──────────────────────────────────────────────
 
 ENDED_MESSAGE = """\
 This screening session has ended. If you'd like to start a new screening, \
 please refresh the page. Have a great day! 😊\
 """
 
-# ──────────────────────────────────────────────
 # Fallback: off-topic nudge
-# ──────────────────────────────────────────────
 
 OFF_TOPIC_NUDGE = """\
 I appreciate the question, but I'm only able to help with the screening \

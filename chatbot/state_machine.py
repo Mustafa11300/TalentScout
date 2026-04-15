@@ -39,9 +39,7 @@ from chatbot.prompts import (
 from data.schema import CandidateSession
 
 
-# ──────────────────────────────────────────────
 # State enum
-# ──────────────────────────────────────────────
 
 class ConversationState(Enum):
     """The six discrete stages of a screening conversation."""
@@ -60,9 +58,7 @@ EXIT_KEYWORDS = {"bye", "quit", "exit", "stop", "end", "goodbye", "done"}
 REQUIRED_INFO_FIELDS = ["name", "email", "phone", "location", "experience", "position"]
 
 
-# ──────────────────────────────────────────────
 # State Machine
-# ──────────────────────────────────────────────
 
 class StateMachine:
     """
@@ -80,7 +76,7 @@ class StateMachine:
         self.tech_answers: list[dict] = []          # candidate answers
         self._greeting_sent: bool = False
 
-    # ── public API ──────────────────────────────
+    # Public API
 
     def get_greeting(self) -> str:
         """Return the initial greeting message (called once on session start)."""
@@ -97,14 +93,14 @@ class StateMachine:
         """
         self.context.add_user_message(user_text)
 
-        # ── Exit keyword detection (runs before state logic) ──
+        # Exit keyword detection
         if self._is_exit_request(user_text) and self.state not in (
             ConversationState.WRAP_UP,
             ConversationState.ENDED,
         ):
             self.state = ConversationState.WRAP_UP
 
-        # ── State dispatch ──
+        # State dispatch
         handler = {
             ConversationState.GREETING: self._handle_greeting,
             ConversationState.INFO_GATHERING: self._handle_info_gathering,
@@ -136,7 +132,7 @@ class StateMachine:
         collected = total - len(self.get_missing_info_fields())
         return collected, total
 
-    # ── state handlers (private) ────────────────
+    # State handlers
 
     def _handle_greeting(self, user_text: str) -> str:
         """
@@ -152,7 +148,7 @@ class StateMachine:
         Collect name, email, phone, location, experience, and position.
         Transition trigger: all 6 fields extracted.
         """
-        # ── Try LLM-based extraction first, fall back to regex ──
+        # Try LLM-based extraction first, fall back to regex
         missing = self.get_missing_info_fields()
 
         if is_llm_available():
@@ -221,7 +217,7 @@ class StateMachine:
 
         self.candidate.tech_stack = techs
 
-        # ── Two-pass question generation ──
+        # Two-pass question generation
         # Pass 1: try LLM, fall back to static bank
         if is_llm_available():
             llm_questions = generate_tech_questions_via_llm(techs)
@@ -272,7 +268,7 @@ class StateMachine:
         """Terminal state — reject further substantive input."""
         return ENDED_MESSAGE
 
-    # ── helpers ─────────────────────────────────
+    # Helpers
 
     def _is_exit_request(self, text: str) -> bool:
         """Check if the user message contains an exit keyword."""

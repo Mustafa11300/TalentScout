@@ -24,9 +24,7 @@ _ROLE_KEYWORDS = {
 }
 
 
-# ──────────────────────────────────────────────
 # Field extraction from free text
-# ──────────────────────────────────────────────
 
 def extract_candidate_fields(text: str, current: CandidateSession) -> dict:
     """
@@ -50,8 +48,6 @@ def extract_candidate_fields(text: str, current: CandidateSession) -> dict:
     """
     extracted: dict = {}
 
-    # ── High-confidence pattern-based extraction ──
-
     # Email
     if not current.email:
         email = _extract_email(text)
@@ -70,27 +66,25 @@ def extract_candidate_fields(text: str, current: CandidateSession) -> dict:
         if exp:
             extracted["experience"] = exp
 
-    # Name (explicit patterns like "My name is …" / "I'm …")
+    # Name
     if not current.name:
         name = _extract_name_explicit(text)
         if name:
             extracted["name"] = name
 
-    # Location (explicit patterns like "based in …" / "from …")
+    # Location
     if not current.location:
         loc = _extract_location_explicit(text)
         if loc:
             extracted["location"] = loc
 
-    # Position (explicit patterns like "applying for …" / "role: …")
+    # Position
     if not current.position:
         pos = _extract_position_explicit(text)
         if pos:
             extracted["position"] = pos
 
-    # ── Short-answer fallback ──
-    # If the user gave a short standalone reply and no pattern matched
-    # for the remaining missing fields, infer based on what we're still missing.
+    # Short-answer fallback
     if not extracted:
         fallback = _extract_short_answer_fallback(text, current)
         if fallback:
@@ -99,9 +93,7 @@ def extract_candidate_fields(text: str, current: CandidateSession) -> dict:
     return extracted
 
 
-# ──────────────────────────────────────────────
 # Tech stack parsing
-# ──────────────────────────────────────────────
 
 def parse_tech_stack(text: str) -> list[str]:
     """
@@ -128,9 +120,7 @@ def parse_tech_stack(text: str) -> list[str]:
     return techs
 
 
-# ──────────────────────────────────────────────
-# Private helpers — pattern-based (high confidence)
-# ──────────────────────────────────────────────
+# Private pattern-based helpers
 
 def _extract_email(text: str) -> Optional[str]:
     match = re.search(r"[\w\.+\-]+@[\w\.\-]+\.\w+", text)
@@ -169,7 +159,6 @@ def _extract_experience(text: str) -> Optional[str]:
 
 
 def _extract_name_explicit(text: str) -> Optional[str]:
-    """Extract name from explicit patterns like 'My name is …' / 'I'm …'."""
     match = re.search(
         r"(?:my name is|i'?m|i am|name[:\s]*)\s+([A-Z][a-zA-Z]+(?:\s+[A-Z][a-zA-Z]+)*)",
         text,
@@ -181,7 +170,6 @@ def _extract_name_explicit(text: str) -> Optional[str]:
 
 
 def _extract_location_explicit(text: str) -> Optional[str]:
-    """Extract location from explicit patterns like 'based in …', 'from …'."""
     match = re.search(
         r"(?:based in|from|located? (?:in|at)|location[:\s]*|live in|living in|city[:\s]*)\s+(.+?)(?:[,.]|$)",
         text,
@@ -193,7 +181,6 @@ def _extract_location_explicit(text: str) -> Optional[str]:
 
 
 def _extract_position_explicit(text: str) -> Optional[str]:
-    """Extract position from explicit patterns like 'applying for …', 'role: …'."""
     match = re.search(
         r"(?:applying for|role[:\s]*|position[:\s]*|interested in|want to be|looking for)\s+(.+?)(?:[,.]|$)",
         text,
@@ -204,9 +191,7 @@ def _extract_position_explicit(text: str) -> Optional[str]:
     return None
 
 
-# ──────────────────────────────────────────────
-# Short-answer fallback (context-aware)
-# ──────────────────────────────────────────────
+# Short-answer fallback
 
 def _extract_short_answer_fallback(text: str, current: CandidateSession) -> Optional[dict]:
     """
@@ -235,7 +220,7 @@ def _extract_short_answer_fallback(text: str, current: CandidateSession) -> Opti
     # Check if it looks like experience
     is_experience_like = bool(re.search(r"\d+\s*(?:years?|yrs?|yr)", lower, re.IGNORECASE))
 
-    # Priority: determine which missing field this most likely is
+    # Priority determination
     # We check the most specific signals first
 
     # Experience
@@ -246,8 +231,7 @@ def _extract_short_answer_fallback(text: str, current: CandidateSession) -> Opti
     if not current.position and is_role_like:
         return {"position": stripped.title()}
 
-    # For non-keyword short answers, assign to the first missing "free text" field
-    # in the order the bot asks for them: name → location → position
+    # Fallback to free text fields
     if not current.name and not is_role_like:
         # If first word starts with a letter and it's 1-4 words, likely a name
         if len(words) <= 4 and words[0][0].isalpha():
@@ -258,7 +242,7 @@ def _extract_short_answer_fallback(text: str, current: CandidateSession) -> Opti
         if not re.search(r"\d", stripped) and words[0][0].isalpha():
             return {"location": stripped.title()}
 
-    # Last resort: if position is missing and nothing else matched
+    # Last resort
     if not current.position:
         return {"position": stripped.title()}
 
